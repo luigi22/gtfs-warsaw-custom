@@ -4,7 +4,7 @@ from impuls import DBConnection, Task, TaskRuntime
 from impuls.model import Calendar, Date, Route, Stop, StopTime, TimePoint, Trip
 import pandas as pd
 import uuid
-from .consts import WEEKDAY_CAL_ID, SAT_CAL_ID, SUN_CAL_ID, START_DATE, END_DATE
+from .consts import ON_REQUEST_STOPS, WEEKDAY_CAL_ID, SAT_CAL_ID, SUN_CAL_ID, START_DATE, END_DATE
 
 
 class LoadTrips(impuls.Task):
@@ -128,13 +128,18 @@ class LoadTrips(impuls.Task):
                 else:
                     arrival_time = departure_time
 
+                stop_id = stops[i]
+                passenger_exchange = impuls.model.StopTime.PassengerExchange.ON_REQUEST if stop_id in ON_REQUEST_STOPS else impuls.model.StopTime.PassengerExchange.SCHEDULED_STOP
+
                 db.create(
                     StopTime(
                         trip_id=trip_id,
-                        stop_id=stops[i],
+                        stop_id=stop_id,
                         stop_sequence=i,
                         arrival_time=arrival_time,
                         departure_time=departure_time,
+                        drop_off_type = passenger_exchange,
+                        pickup_type = passenger_exchange,
                     )
                 )
 
