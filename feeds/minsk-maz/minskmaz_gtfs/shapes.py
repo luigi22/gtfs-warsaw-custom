@@ -18,6 +18,7 @@ class LoadShapes(impuls.Task):
                 "M3R",
                 "M4",
                 "M4A",
+                "M4B",
                 "M4R",
             ]
             for shape in shapes:

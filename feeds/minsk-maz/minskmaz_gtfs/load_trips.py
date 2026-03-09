@@ -117,6 +117,7 @@ class LoadTrips(impuls.Task):
             self.create_stop(int(stop), db)
         for trip in data[1:]:
             actual_shape = (shape_alt if trip[1] == "~" and shape_alt else shape) if shape else None
+            actual_shape = "M4B" if shape_alt == "M4A" and trip[-1] == "~" else actual_shape
 
             first_non_empty_time = next(time for time in trip[1:] if time != "~")
             trip_id = f"{calendar}_{actual_shape}_{first_non_empty_time}"
